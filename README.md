@@ -26,3 +26,11 @@ General notes/limitations:
 - All code blocks are assumed to be Python code blocks.
 - Output is simply deleted.
 - Everything else is put in Markdown cells.
+
+#Changes as of 2/22/2015
+
+convert_all_sage_worksheets now creates the new .ipynb files in a directory of the
+same name. It also detects worksheets of the same name, and copies the worksheets'
+associated data directories.
+
+Now has 2 dependencies: os and shutil

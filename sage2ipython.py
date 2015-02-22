@@ -27,6 +27,8 @@ General notes/limitations:
       Otherwise, you should convert them to quadruple backslashes.
 """
 
+import os
+import shutil
 
 preamble_string = """{
  "metadata": {
@@ -169,11 +171,19 @@ def convert_all_sage_worksheets(user):
     import os
     import pickle
 
-    path = '/Users/'+user+'/.sage/sage_notebook.sagenb/home/admin'
+    path = '/home/'+user+'/.sage/sage_notebook.sagenb/home/admin'
     worksheets = [x for x in os.listdir(path) if x.isdigit()]
     for worksheet in worksheets:
         ws_path = path+'/'+worksheet+'/'
         f = open(ws_path+'worksheet_conf.pickle')
         ws_data = pickle.load(f)
-        ws_name = ws_data['name']
-        sage2ipy(ws_path,ws_name)
+        ws_name = ws_data['name'].replace('/','-')
+	copy_number = 0
+	while ws_name in os.listdir(os.getcwd()):
+		copy_number+=1
+		ws_name=ws_name+' copy'+str(copy_number)
+	os.mkdir(ws_name)
+	shutil.copytree(ws_path+'data',ws_name+'/data')
+        sage2ipy(ws_path,ws_name+'/'+ws_name)
+
+
